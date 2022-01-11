@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   status.c                                           :+:      :+:    :+:   */
+/*   status_display.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 16:22:23 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/10 17:08:24 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/11 20:57:25 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ long int	get_timestamp(void)
 long int	printer(t_philo *philo, int i, long int ms)
 {
 	static char	*status[5] = {
-		"has taken a fork",
-		"is eating",
-		"is sleeping",
-		"is thinking",
-		"died"
+	[FORK] = " has taken a fork\n",
+	[EAT] = " is eating\n",
+	[SLEEP] = " is sleeping\n",
+	[THINK] = " is thinking\n",
+	[DEAD] = " died\n"
 	};
 	t_buff		buff;
 
@@ -50,9 +50,7 @@ long int	printer(t_philo *philo, int i, long int ms)
 	write_longint_buffer(&buff, ms);
 	write_char_buffer(&buff, ' ', 1);
 	write_longint_buffer(&buff, philo->id);
-	write_char_buffer(&buff, ' ', 1);
 	write_str_buffer(&buff, status[i], -1);
-	write_char_buffer(&buff, '\n', 1);
 	print_buffer(&buff, 1);
 	return (ms);
 }

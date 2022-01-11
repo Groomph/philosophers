@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:58:01 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/10 20:55:45 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/11 20:57:06 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	odd_eat(t_facebook *fb, t_philo *philo)
 	pthread_mutex_lock(philo->fork1);
 	pthread_mutex_lock(philo->fork2);
 	pthread_mutex_lock(philo->display);
-	printer(philo, FORK, printer(philo, FORK, -1));
+	philo->last_meal = printer(philo, EAT,
+			printer(philo, FORK, printer(philo, FORK, -1)));
 	pthread_mutex_unlock(philo->display);
-	philo->last_meal = display_status(philo, EAT, -1);
 	philo->meals++;
 	philo->sleep(fb->sleep);
 	pthread_mutex_unlock(philo->fork2);
@@ -32,9 +32,9 @@ void	even_eat(t_facebook *fb, t_philo *philo)
 	pthread_mutex_lock(philo->fork2);
 	pthread_mutex_lock(philo->fork1);
 	pthread_mutex_lock(philo->display);
-	printer(philo, FORK, printer(philo, FORK, -1));
+	philo->last_meal = printer(philo, EAT,
+			printer(philo, FORK, printer(philo, FORK, -1)));
 	pthread_mutex_unlock(philo->display);
-	philo->last_meal = display_status(philo, EAT, -1);
 	philo->meals++;
 	philo->sleep(fb->sleep);
 	pthread_mutex_unlock(philo->fork1);

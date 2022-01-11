@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 16:22:23 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/12/10 15:20:09 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/11 20:56:27 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ long int	get_timestamp(void)
 long int	printer(t_philo *philo, int i, long int ms)
 {
 	static char	*status[5] = {
-		"has taken a fork",
-		"is eating",
-		"is sleeping",
-		"is thinking",
-		"died"
+	[FORK] = " has taken a fork\n",
+	[EAT] = " is eating\n",
+	[SLEEP] = " is sleeping\n",
+	[THINK] = " is thinking\n",
+	[DEAD] = " died\n"
 	};
 
 	if (ms < 0)
@@ -50,9 +50,7 @@ long int	printer(t_philo *philo, int i, long int ms)
 		write_longint_buffer(philo->buff, ms);
 		write_char_buffer(philo->buff, ' ', 1);
 		write_longint_buffer(philo->buff, philo->id);
-		write_char_buffer(philo->buff, ' ', 1);
 		write_str_buffer(philo->buff, status[i], -1);
-		write_char_buffer(philo->buff, '\n', 1);
 	}
 	return (ms);
 }
