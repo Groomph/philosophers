@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:27:16 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/11 18:27:40 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/11 19:07:10 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	clean_program(t_facebook *fb)
 		safe_close(fb->death);
 	if (fb->start)
 		safe_close(fb->start);
-	free(fb->pid);
+	if (fb->pid)
+		free(fb->pid);
 }
 
 int	error(t_facebook *fb, BOOL clean, const char *str, int size)
