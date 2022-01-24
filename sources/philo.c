@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:58:01 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/11 20:57:06 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/24 17:53:41 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	odd_eat(t_facebook *fb, t_philo *philo)
 			printer(philo, FORK, printer(philo, FORK, -1)));
 	pthread_mutex_unlock(philo->display);
 	philo->meals++;
-	philo->sleep(fb->sleep);
+	philo->sleep(fb->eat);
 	pthread_mutex_unlock(philo->fork2);
 	pthread_mutex_unlock(philo->fork1);
 }
@@ -36,7 +36,7 @@ void	even_eat(t_facebook *fb, t_philo *philo)
 			printer(philo, FORK, printer(philo, FORK, -1)));
 	pthread_mutex_unlock(philo->display);
 	philo->meals++;
-	philo->sleep(fb->sleep);
+	philo->sleep(fb->eat);
 	pthread_mutex_unlock(philo->fork1);
 	pthread_mutex_unlock(philo->fork2);
 }
