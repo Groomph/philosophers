@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 18:36:41 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/11 18:30:14 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 15:25:37 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ static BOOL	build_list(t_facebook *fb, t_philo *philos, int max)
 	while (++i < max)
 	{
 		philos[i].id = i + 1;
-		philos[i].meals = 0;
 		philos[i].fb = fb;
-		philos[i].is_dead = FALSE;
 		if (fb->nb > 15)
 			philos[i].sleep = usleep;
 		else

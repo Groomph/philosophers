@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 18:36:41 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/12/13 18:54:20 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 15:28:44 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static BOOL	atou_parsing(const char *str, int *nb)
 	return (TRUE);
 }
 
-static BOOL	mallocing(t_facebook *fb, int max)
+static BOOL	mallocing_mutex(t_facebook *fb, int max)
 {
 	fb->philos = malloc(sizeof(t_philo) * max);
 	if (!(fb->philos))
@@ -50,14 +50,21 @@ static BOOL	mallocing(t_facebook *fb, int max)
 		free(fb->philos);
 		return (FALSE);
 	}
+	if (pthread_mutex_init(&(fb->display), NULL) != 0)
+		return (error(fb, TRUE, "Mutex init error\n", 17));
+	if (pthread_mutex_init(&(fb->checkend), NULL) != 0)
+		return (error(fb, TRUE, "Mutex init error\n", 17));
 	return (TRUE);
 }
 
 static void	build_list2(t_facebook *fb, t_philo *philo)
 {
 	philo->is_dead = &(fb->is_end);
+	philo->checkend = &(fb->checkend);
 	philo->buff = &(fb->buff);
 	philo->display = &(fb->display);
+	philo->fb = fb;
+	philo->meals = 0;
 	if (fb->nb > 15)
 		philo->sleep = usleep;
 	else
@@ -68,22 +75,22 @@ static BOOL	build_list(t_facebook *fb, t_philo *philos, int max)
 {
 	int	i;
 
-	if (!mallocing(fb, max))
+	if (!mallocing_mutex(fb, max))
 		return (error(fb, FALSE, "Malloc error\n", 13));
 	philos = fb->philos;
-	if (pthread_mutex_init(&(fb->display), NULL) != 0)
-		return (error(fb, TRUE, "Mutex init error\n", 17));
 	i = -1;
 	while (++i < max)
 	{
 		philos[i].id = i + 1;
-		philos[i].meals = 0;
-		philos[i].fb = fb;
-		if (pthread_mutex_init(&(fb->forks[i]), NULL) != 0)
-			return (error(fb, TRUE, "Mutex init error\n", 17));
 		philos[i].fork1 = &(fb->forks[i]);
 		if (i + 1 < max)
 			philos[i].fork2 = &(fb->forks[i + 1]);
+		if (pthread_mutex_init(&(fb->forks[i]), NULL) != 0)
+			return (error(fb, TRUE, "Mutex init error\n", 17));
+		if (pthread_mutex_init(&(philos[i].getmeals), NULL) != 0)
+			return (error(fb, TRUE, "Mutex init error\n", 17));
+		if (pthread_mutex_init(&(philos[i].gettimer), NULL) != 0)
+			return (error(fb, TRUE, "Mutex init error\n", 17));
 		build_list2(fb, &(philos[i]));
 	}
 	philos[max - 1].fork2 = &(fb->forks[0]);

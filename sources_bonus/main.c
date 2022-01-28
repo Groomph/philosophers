@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:27:16 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/11 19:07:10 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 12:43:48 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <semaphore.h>
+
+void	clean_philo_sem(int philo_nb)
+{
+	t_philo	tmp;
+
+	tmp.id = 1;
+	while (tmp.id <= philo_nb)
+	{
+		set_sem_name(&tmp);
+		sem_unlink(tmp.timer_name);
+		sem_unlink(tmp.meals_name);
+		tmp.id++;
+	}
+}
 
 void	clean_program(t_facebook *fb)
 {
@@ -25,6 +39,7 @@ void	clean_program(t_facebook *fb)
 	sem_unlink("count_meals");
 	sem_unlink("death");
 	sem_unlink("start_simulation");
+	clean_philo_sem(fb->nb);
 	if (fb->display)
 		safe_close(fb->display);
 	if (fb->count_meals)
@@ -47,28 +62,6 @@ int	error(t_facebook *fb, BOOL clean, const char *str, int size)
 	if (clean)
 		clean_program(fb);
 	return (0);
-}
-
-static BOOL	init_sem(t_facebook *fb, int forks)
-{
-	sem_t	*sem;
-
-	sem_unlink("forks_nam_nam");
-	sem_unlink("displayer");
-	sem_unlink("count_meals");
-	sem_unlink("death");
-	sem_unlink("start_simulation");
-	if (!safe_create(&sem, "forks_nam_nam", forks) || !safe_close(sem))
-		return (FALSE);
-	if (!safe_create(&(fb->display), "displayer", 1))
-		return (FALSE);
-	if (!safe_create(&(fb->count_meals), "count_meals", 0))
-		return (FALSE);
-	if (!safe_create(&(fb->death), "death", 0))
-		return (FALSE);
-	if (!safe_create(&(fb->start), "start_simulation", 0))
-		return (FALSE);
-	return (TRUE);
 }
 
 int	main(int ac, char **av)

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 16:19:25 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/12/13 18:59:10 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 15:27:26 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,11 @@ typedef struct s_facebook
 	int			meals;
 	t_philo		*philos;
 	t_fork		*forks;
+	long int	start;
 	BOOL		is_end;
 	t_buff		buff;
 	t_mutex		display;
+	t_mutex		checkend;
 	pthread_t	thread;
 
 }			t_facebook;
@@ -64,6 +66,9 @@ typedef struct s_philo
 	t_facebook	*fb;
 	t_buff		*buff;
 	t_mutex		*display;
+	t_mutex		*checkend;
+	t_mutex		getmeals;
+	t_mutex		gettimer;
 	int			(*sleep)(unsigned int ms);
 }			t_philo;
 
@@ -78,5 +83,14 @@ BOOL			parse_args(t_facebook *fb, char **av, int ac);
 BOOL			launch_thread(t_facebook *fb, t_philo *philo);
 void			*even_routine(t_philo *philos);
 void			*odd_routine(t_philo *philos);
+
+int				get_meals(t_philo *philo);
+void			increment_meals(t_philo *philo);
+long int		get_mealtimer(t_philo *philo);
+void			set_mealtimer(t_philo *philo, long int timer);
+void			set_philoend(t_philo *philo, BOOL end);
+BOOL			get_philoend(t_philo *philo);
+void			set_fbend(t_facebook *fb, BOOL end);
+BOOL			get_fbend(t_facebook *fb);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:27:16 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/12/09 23:59:33 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 15:28:01 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,20 @@
 #include <stdio.h>
 #include <string.h>
 
-static void	lave_vaisselle(t_fork *fork, int max)
+static void	lave_vaisselle(t_philo *philos, t_fork *fork, int max)
 {
 	int	i;
 
 	i = 0;
 	while (i < max)
 	{
-		pthread_mutex_destroy(&(fork[i]));
+		if (fork)
+			pthread_mutex_destroy(&(fork[i]));
+		if (philos)
+		{
+			pthread_mutex_destroy(&(philos[i].getmeals));
+			pthread_mutex_destroy(&(philos[i].gettimer));
+		}
 		i++;
 	}
 	free(fork);
@@ -30,11 +36,12 @@ static void	lave_vaisselle(t_fork *fork, int max)
 
 void	clean_program(t_facebook *fb)
 {
+	if (fb->forks || fb->philos)
+		lave_vaisselle(fb->philos, fb->forks, fb->nb);
 	if (fb->philos)
 		free(fb->philos);
-	if (fb->forks)
-		lave_vaisselle(fb->forks, fb->nb);
 	pthread_mutex_destroy(&(fb->display));
+	pthread_mutex_destroy(&(fb->checkend));
 }
 
 int	error(t_facebook *fb, BOOL clean, const char *str, int size)

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 20:34:04 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/11 18:30:54 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 16:27:35 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static void	*simulation_starter(t_facebook *fb)
 	int	i;
 
 	i = 0;
+	usleep(2000 * fb->nb);
 	while (i < fb->nb)
 	{
 		sem_post(fb->start);

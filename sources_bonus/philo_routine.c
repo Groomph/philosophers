@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:58:01 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 17:53:59 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 12:29:15 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static void	philo_eat(t_facebook *fb, t_philo *philo)
 {
 	sem_wait(philo->forks);
 	sem_wait(philo->forks);
+	sem_wait(philo->timer_access);
 	sem_wait(philo->display);
 	philo->last_meal = printer(philo, EAT,
 			printer(philo, FORK, printer(philo, FORK, -1)));
 	sem_post(philo->display);
-	philo->meals++;
+	sem_post(philo->timer_access);
+	sem_post(philo->meals_access);
 	philo->sleep(fb->eat);
 	sem_post(philo->forks);
 	sem_post(philo->forks);

@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/19 16:05:34 by rsanchez          #+#    #+#              #
-#    Updated: 2022/01/11 18:51:59 by rsanchez         ###   ########.fr        #
+#    Updated: 2022/01/28 12:44:31 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,13 +32,15 @@ DIR_SB = sources_bonus
 
 DIR_OB = temporary_bonus
 
-SOURCES = main.c parse_args.c threads.c philo.c status.c buffer.c sleep.c
+SOURCES = main.c parse_args.c threads.c philo.c status.c buffer.c sleep.c \
+	  $(TOOL)/meals.c $(TOOL)/death.c
 
 TOOL = utils
 
 SOURCESB = main.c parse_args.c proc_main.c proc_children.c \
 	   philo_routine.c status_display.c \
-	   $(TOOL)/buffer.c $(TOOL)/sleep.c $(TOOL)/thread.c $(TOOL)/semaphore.c
+	   $(TOOL)/buffer.c $(TOOL)/sleep.c $(TOOL)/thread.c \
+	   $(TOOL)/semaphore.c $(TOOL)/utoa.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
@@ -60,6 +62,7 @@ $(NAMEB): $(OBJSB)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
 	@mkdir -p $(DIR_O)
+	@mkdir -p $(DIR_O)/$(TOOL)
 	$(CC) $(CFLAGS) -I $(HEADER) -o $@ -c $<
 
 $(DIR_OB)/%.o: $(DIR_SB)/%.c

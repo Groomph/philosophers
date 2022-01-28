@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 16:22:23 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/11 20:57:25 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 12:18:31 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ long int	printer(t_philo *philo, int i, long int ms)
 	if (ms < 0)
 		ms = get_timestamp();
 	init_buffer(&buff);
-	write_longint_buffer(&buff, ms);
+	write_longint_buffer(&buff, ms - philo->start_sim);
 	write_char_buffer(&buff, ' ', 1);
 	write_longint_buffer(&buff, philo->id);
 	write_str_buffer(&buff, status[i], -1);
