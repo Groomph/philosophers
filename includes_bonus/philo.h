@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 16:19:25 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/28 15:26:57 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:45:06 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_facebook
 	sem_t		*count_meals;
 	sem_t		*death;
 	sem_t		*start;
+	sem_t		*state;
 	pid_t		*pid;
 	BOOL		end;
 }			t_facebook;

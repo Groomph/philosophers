@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 20:34:04 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/28 16:27:35 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:50:21 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,17 @@ static void	*count_meals(t_facebook *fb)
 	int	i;
 
 	i = 0;
+	sem_wait(fb->state);
 	while (i < fb->nb && !(fb->end))
 	{
+		sem_post(fb->state);
 		sem_wait(fb->count_meals);
 		i++;
+		sem_wait(fb->state);
 	}
 	if (!(fb->end))
 		sem_wait(fb->display);
+	sem_post(fb->state);
 	sem_post(fb->death);
 	return (NULL);
 }
@@ -54,7 +58,9 @@ static void	*count_meals(t_facebook *fb)
 static void	*wait_death(t_facebook *fb)
 {
 	sem_wait(fb->death);
+	sem_wait(fb->state);
 	fb->end = TRUE;
+	sem_post(fb->state);
 	sem_post(fb->count_meals);
 	return (NULL);
 }
@@ -64,7 +70,7 @@ static void	*simulation_starter(t_facebook *fb)
 	int	i;
 
 	i = 0;
-	usleep(2000 * fb->nb);
+	usleep(10000 * fb->nb);
 	while (i < fb->nb)
 	{
 		sem_post(fb->start);

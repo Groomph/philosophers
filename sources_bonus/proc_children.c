@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 20:34:04 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/28 15:25:20 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:45:03 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,17 @@
 
 static void	*monitor_meals(t_philo *philo)
 {
-	int	i;
+	int			i;
+	t_facebook	*fb;
 
 	i = 0;
-	while (i < philo->fb->meals)
+	fb = philo->fb;
+	while (i < fb->meals)
 	{
 		sem_wait(philo->meals_access);
 		i++;
 	}
-	sem_post(philo->count_meals);
+	sem_post(fb->count_meals);
 	return (NULL);
 }
 
@@ -54,17 +56,18 @@ static void	*monitor_hunger(t_philo *philo)
 	return (NULL);
 }
 
+//	if (!safe_open(&(philo->count_meals), "count_meals"))
+//		return (FALSE);
+//	if (!safe_open(&(philo->display), "displayer"))
+//		return (FALSE);
+//	if (!safe_open(&(philo->death), "death"))
+//		return (FALSE);
+//	if (!safe_open(&(philo->start), "start_simulation"))
+//		return (FALSE);
+
 static BOOL	init_proc(t_philo *philo, pthread_t *thread, pthread_t *thread2)
 {
-	if (!safe_open(&(philo->count_meals), "count_meals"))
-		return (FALSE);
 	if (!safe_open(&(philo->forks), "forks_nam_nam"))
-		return (FALSE);
-	if (!safe_open(&(philo->display), "displayer"))
-		return (FALSE);
-	if (!safe_open(&(philo->death), "death"))
-		return (FALSE);
-	if (!safe_open(&(philo->start), "start_simulation"))
 		return (FALSE);
 	set_sem_name(philo);
 	if (!safe_open(&(philo->meals_access), philo->meals_name))

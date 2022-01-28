@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 17:18:05 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/28 15:38:59 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:44:40 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ BOOL	safe_close(sem_t *sem)
 	return (TRUE);
 }
 
-static BOOL	init_philo_sem(int nb)
+static BOOL	init_philo_sem(t_philo *philos, t_facebook *fb, int nb)
 {
 	t_philo	tmp;
 	sem_t	*sem;
@@ -53,6 +53,10 @@ static BOOL	init_philo_sem(int nb)
 		sem_unlink(tmp.meals_name);
 		if (!safe_create(&sem, tmp.meals_name, 0) || !safe_close(sem))
 			return (FALSE);
+		philos[tmp.id - 1].count_meals = fb->count_meals;
+		philos[tmp.id - 1].display = fb->display;
+		philos[tmp.id - 1].death = fb->death;
+		philos[tmp.id - 1].start = fb->start;
 		tmp.id++;
 	}
 	return (TRUE);
@@ -67,6 +71,7 @@ BOOL	init_sem(t_facebook *fb, int forks)
 	sem_unlink("count_meals");
 	sem_unlink("death");
 	sem_unlink("start_simulation");
+	sem_unlink("ChEcK_sTaTe");
 	clean_philo_sem(forks);
 	if (!safe_create(&sem, "forks_nam_nam", forks) || !safe_close(sem))
 		return (FALSE);
@@ -78,5 +83,7 @@ BOOL	init_sem(t_facebook *fb, int forks)
 		return (FALSE);
 	if (!safe_create(&(fb->start), "start_simulation", 0))
 		return (FALSE);
-	return (init_philo_sem(forks));
+	if (!safe_create(&(fb->state), "ChEcK_sTaTe", 1))
+		return (FALSE);
+	return (init_philo_sem(fb->philos, fb, forks));
 }

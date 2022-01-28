@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:27:16 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/28 12:43:48 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:44:05 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	clean_program(t_facebook *fb)
 	sem_unlink("count_meals");
 	sem_unlink("death");
 	sem_unlink("start_simulation");
+	sem_unlink("ChEcK_sTaTe");
 	clean_philo_sem(fb->nb);
 	if (fb->display)
 		safe_close(fb->display);
@@ -48,6 +49,8 @@ void	clean_program(t_facebook *fb)
 		safe_close(fb->death);
 	if (fb->start)
 		safe_close(fb->start);
+	if (fb->state)
+		safe_close(fb->state);
 	if (fb->pid)
 		free(fb->pid);
 }
